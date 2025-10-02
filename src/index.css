@@ -1,12 +1,16 @@
 :root {
-  color-scheme: light dark;
+  /* color-scheme: light dark; */
   --primary-color: #F5F5F5;
+
+  --background-color: #000000;
+  --primary-color: #F5F5F5;
+  --menu-hover: #1A1A1A;
+  --sidebar-border: #F5F5F530;
 
   --light-background-color: #FFFFFF;
   --light-primary-color: #000000;
   --light-menu-hover: #F2F2F2;
   --light-sidebar-border: #DBDBDB;
-
 
   --dark-background-color: #000000;
   --dark-primary-color: #F5F5F5;
@@ -16,11 +20,11 @@
 
 body {
   height: 100dvh;
-  /* color: var(--light-primary-color);
-  background-color: var(--dark-primary-color); */
+  color: var(--primary-color);
+  background-color: var(--background-color);
 
-  color: light-dark(var(--light-primary-color), var(--dark-primary-color));
-  background-color: light-dark(var(--light-background-color), var(--dark-background-color));
+  /* color: light-dark(var(--light-primary-color), var(--dark-primary-color));
+  background-color: light-dark(var(--light-background-color), var(--dark-background-color)); */
 
   font-family: 'Instagram Sans', 'system-ui', "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-size: 16px;
@@ -49,7 +53,7 @@ body {
   width: 220px;
   height: 100dvh;
   padding: 8px 12px 20px 12px;
-  border-right: 1px solid light-dark(var(--light-sidebar-border), var(--dark-sidebar-border));
+  border-right: 1px solid var(--sidebar-border);
 
   .sidebar-container {
     height: 100%;
@@ -89,7 +93,7 @@ body {
     }
 
     .sidebar-menu-container:hover {
-      background-color: light-dark(var(--light-menu-hover), var(--dark-menu-hover));
+      background-color: var(--menu-hover);
       cursor: pointer;
     }
 

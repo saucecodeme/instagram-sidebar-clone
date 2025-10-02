@@ -1,8 +1,31 @@
 import './App.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 function App() {
+  const [darkColorScheme, setDarkColorScheme] = useState(true)
   const [activeMenu, setActiveMenu] = useState('Home')
+
+  function handleToggleColorScheme() {
+    setDarkColorScheme(prev => !prev)
+  }
+
+  function toggleColorScheme(colorScheme: string) {
+    // Select the root element
+    const root = document.querySelector(':root') as HTMLElement;
+    if (!root) return
+    // Update the CSS variable
+    if (colorScheme === "dark") {
+      root.style.setProperty('--background-color', '#000000');
+      root.style.setProperty('--primary-color', '#F5F5F5');
+      root.style.setProperty('--menu-hover', '#1A1A1A');
+      root.style.setProperty('--sidebar-border', '#F5F5F530');
+    } else if (colorScheme === "light") {
+      root.style.setProperty('--background-color', '#FFFFFF');
+      root.style.setProperty('--primary-color', '#000000');
+      root.style.setProperty('--menu-hover', '#F2F2F2');
+      root.style.setProperty('--sidebar-border', '#DBDBDB');
+    }
+  }
 
   function SidebarMenu({ icon, text }: { icon: React.ReactNode, text: string }) {
     return (
@@ -15,13 +38,30 @@ function App() {
     )
   }
 
+  function ColorSchemeMenu({ icon, text, onClickFn }: { icon: React.ReactNode, text: string, onClickFn: () => void }) {
+    return (
+      <>
+        <div className={`sidebar-menu-container ${text === activeMenu ? 'font-bold' : ''}`} onClick={onClickFn}>
+          {icon}
+          <span className='menu-text'>{text}</span>
+        </div>
+      </>
+    )
+  }
+
+  useEffect(() => {
+    let colorScheme = "dark"
+    if (!darkColorScheme) colorScheme = 'light'
+    toggleColorScheme(colorScheme);
+  }, [darkColorScheme])
+
   return (
     <>
       <div className='sidebar-container-wrapper'>
         <div className='sidebar-container'>
 
           <div className='sidebar-header'>
-            <div className='ig-logo-wrapper'>
+            <div className='ig-logo-wrapper' onClick={handleToggleColorScheme}>
               <div className='ig-logo-container'>
                 <InstagramIcon />
               </div>
@@ -38,6 +78,7 @@ function App() {
           </div>
 
           <div className='sidebar-footer'>
+            <ColorSchemeMenu icon={<ColorSchemeIcon colorScheme={darkColorScheme ? 'light' : 'dark'} />} text={`${darkColorScheme ? 'Light' : 'Dark'} Mode`} onClickFn={handleToggleColorScheme} />
             <SidebarMenu icon={<MoreIcon activated={activeMenu === "More"} />} text="More" />
             <SidebarMenu icon={<AlsoFromMetaIcon activated={activeMenu === "Also from Meta"} />} text="Also from Meta" />
           </div>
@@ -136,6 +177,17 @@ function AlsoFromMetaIcon({ activated }: { activated: boolean }) {
       <svg aria-label="Also from Meta" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Also from Meta</title><path d="M14.5 11h-5A2.503 2.503 0 0 1 7 8.5v-5C7 2.122 8.121 1 9.5 1h5C15.879 1 17 2.122 17 3.5v5c0 1.378-1.121 2.5-2.5 2.5ZM8.499 23h-5a2.503 2.503 0 0 1-2.5-2.5v-5c0-1.378 1.12-2.5 2.5-2.5h5c1.379 0 2.5 1.122 2.5 2.5v5c0 1.378-1.121 2.5-2.5 2.5Zm12 0h-5a2.503 2.503 0 0 1-2.5-2.5v-5c0-1.378 1.12-2.5 2.5-2.5h5c1.379 0 2.5 1.122 2.5 2.5v5c0 1.378-1.121 2.5-2.5 2.5Z"></path></svg>
       :
       <svg aria-label="Also from Meta" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Also from Meta</title><path d="M9.5 11h5c1.379 0 2.5-1.122 2.5-2.5v-5C17 2.122 15.879 1 14.5 1h-5A2.503 2.503 0 0 0 7 3.5v5C7 9.878 8.12 11 9.5 11ZM9 3.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-.5.5h-5a.5.5 0 0 1-.5-.5v-5ZM8.499 13h-5a2.503 2.503 0 0 0-2.5 2.5v5c0 1.378 1.12 2.5 2.5 2.5h5c1.379 0 2.5-1.122 2.5-2.5v-5c0-1.378-1.121-2.5-2.5-2.5Zm.5 7.5a.5.5 0 0 1-.5.5h-5a.5.5 0 0 1-.5-.5v-5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 .5.5v5Zm11.5-7.5h-5a2.503 2.503 0 0 0-2.5 2.5v5c0 1.378 1.12 2.5 2.5 2.5h5c1.379 0 2.5-1.122 2.5-2.5v-5c0-1.378-1.121-2.5-2.5-2.5Zm.5 7.5a.5.5 0 0 1-.5.5h-5a.5.5 0 0 1-.5-.5v-5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 .5.5v5Z"></path></svg>
+    )
+  )
+}
+
+function ColorSchemeIcon({ colorScheme }: { colorScheme: string }) {
+  return (
+    (
+      colorScheme === 'dark' ?
+        <svg aria-label="Theme icon" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Theme icon</title><path d="M11.502,22.99805A11.4313,11.4313,0,0,1,.49512,14.83691a.99889.99889,0,0,1,.251-.998,1.01148,1.01148,0,0,1,.99707-.249,9.43041,9.43041,0,0,0,2.75879.40821A9.5082,9.5082,0,0,0,13.5957,1.74023a1.00039,1.00039,0,0,1,1.24707-1.248A11.501,11.501,0,0,1,11.502,22.99805ZM3.08984,15.91211A9.49991,9.49991,0,0,0,21.002,11.498,9.57875,9.57875,0,0,0,15.916,3.08594,11.5083,11.5083,0,0,1,3.08984,15.91211Z"></path></svg>
+        :
+        <svg aria-label="Theme icon" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Theme icon</title><path d="M12.00018,4.5a1,1,0,0,0,1-1V2a1,1,0,0,0-2,0V3.5A1.00005,1.00005,0,0,0,12.00018,4.5ZM5.28241,6.69678A.99989.99989,0,1,0,6.69647,5.28271l-1.06054-1.061A.99989.99989,0,0,0,4.22186,5.63574ZM4.50018,12a1,1,0,0,0-1-1h-1.5a1,1,0,0,0,0,2h1.5A1,1,0,0,0,4.50018,12Zm.78223,5.30322-1.06055,1.061a.99989.99989,0,1,0,1.41407,1.41406l1.06054-1.061a.99989.99989,0,0,0-1.41406-1.41407ZM12.00018,19.5a1.00005,1.00005,0,0,0-1,1V22a1,1,0,0,0,2,0V20.5A1,1,0,0,0,12.00018,19.5Zm6.71729-2.19678a.99989.99989,0,0,0-1.41406,1.41407l1.06054,1.061A.99989.99989,0,0,0,19.778,18.36426ZM22.00018,11h-1.5a1,1,0,0,0,0,2h1.5a1,1,0,0,0,0-2ZM18.01044,6.98975a.996.996,0,0,0,.707-.293l1.06055-1.061A.99989.99989,0,0,0,18.364,4.22168l-1.06054,1.061a1,1,0,0,0,.707,1.707ZM12.00018,6a6,6,0,1,0,6,6A6.00657,6.00657,0,0,0,12.00018,6Zm0,10a4,4,0,1,1,4-4A4.00458,4.00458,0,0,1,12.00018,16Z"></path></svg>
     )
   )
 }
